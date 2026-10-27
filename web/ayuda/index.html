@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Paso a Paso Ayuda</title>
+<meta property="og:title" content="Paso a Paso Ayuda">
+<meta property="og:description" content="Toca aquí para que tu agente te ayude con tu teléfono.">
+<meta property="og:image" content="https://pasoapasoid.netlify.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffd23f'/%3E%3Cpath d='M18 33l9 9 19-20' fill='none' stroke='%230b6e75' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@500;700&display=swap">
+<style>
+/* Una sola columna, un botón gigante. Para personas que casi no usan el teléfono. */
+:root{--bg:#f3f7f8;--card:#fff;--ink:#10282f;--muted:#4b6168;--line:#d3e1e4;--brand:#0b6e75;--brand-ink:#fff;--sun:#ffd23f;--sun-ink:#2b2200;
+  --display:"Lexend",system-ui,sans-serif;--body:"Atkinson Hyperlegible",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0c1a1e;--card:#13262b;--ink:#e8f2f3;--muted:#a6bcc1;--line:#25424a;--brand:#3fb7bf;--brand-ink:#05181b;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 24px/1.4 var(--body);
+  padding:max(24px,env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) max(32px,env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
+main{max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1{font:700 36px/1.15 var(--display);margin:0;text-wrap:balance}
+p{margin:0}
+.big{display:flex;align-items:center;justify-content:center;text-align:center;min-height:110px;border-radius:26px;padding:18px;
+  font:700 30px/1.2 var(--display);text-decoration:none;background:var(--sun);color:var(--sun-ink)}
+.big:focus-visible{outline:5px solid var(--brand);outline-offset:4px}
+.second{background:transparent;border:3px solid var(--line);color:var(--ink);min-height:84px;font-size:24px}
+.steps{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:12px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;display:flex;flex-direction:column;gap:14px}
+.muted{color:var(--muted);font-size:20px}
+</style>
+<script src="config.js"></script>
+</head>
+<body>
+<main id="app"></main>
+<script>
+const id = (location.hash || '').slice(1);
+const okId = /^[A-Za-z0-9_-]{20,64}$/.test(id);
+const isAndroid = /android/i.test(navigator.userAgent);
+const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const apk = window.PAP_APK || '';
+const app = document.getElementById('app');
+
+if (!okId) {
+  app.innerHTML = `<h1>Este link ya no sirve</h1><p>Pídele a tu agente que te mande uno nuevo por WhatsApp.</p>`;
+} else if (isIOS) {
+  app.innerHTML = `<h1>Esta ayuda es para teléfonos Android</h1>
+    <p>Tu agente te va a ayudar de otra forma. Espera su llamada.</p>`;
+} else {
+  const intent = `intent://s/${id}#Intent;scheme=pasoapaso;package=com.pasoapaso.ayuda;` +
+                 (apk ? `S.browser_fallback_url=${encodeURIComponent(apk)};` : '') + 'end';
+  app.innerHTML = `
+    <h1>Hola. Toca el botón amarillo</h1>
+    <p>Así tu agente te puede ayudar con tu teléfono.</p>
+    <a class="big" id="open" href="${isAndroid ? intent : '#'}">Conectar con mi agente</a>
+    <div class="box">
+      <p><b>¿Es la primera vez?</b> Primero hay que instalar la app. Tu agente te dice qué tocar.</p>
+      ${apk ? `<a class="big second" href="${apk}">Instalar la app</a>` : `<p class="muted">Falta el link de instalación. Avísale a tu agente.</p>`}
+      <ol class="steps muted">
+        <li>Toca "Instalar la app" y luego "Descargar".</li>
+        <li>Abre el archivo que bajó y toca "Instalar". Si te pide permiso, toca "Configuración", prende el interruptor y vuelve.</li>
+        <li>Vuelve a esta página y toca "Conectar con mi agente".</li>
+      </ol>
+    </div>
+    ${isAndroid ? '' : '<p class="muted">Abre este link desde un teléfono Android.</p>'}`;
+}
+</script>
+</body>
+</html>

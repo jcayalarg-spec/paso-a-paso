@@ -1,0 +1,38 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "sessions": {
+      "$sid": {
+        ".read": "$sid.matches(/^[A-Za-z0-9_-]{20,64}$/)",
+        ".write": "$sid.matches(/^[A-Za-z0-9_-]{20,64}$/)",
+        "agent": {
+          "name": { ".validate": "newData.isString() && newData.val().length <= 80" },
+          "client": { ".validate": "newData.isString() && newData.val().length <= 80" },
+          "t": { ".validate": "newData.isNumber()" },
+          "$other": { ".validate": false }
+        },
+        "frame": {
+          "d": { ".validate": "newData.isString() && newData.val().length <= 600000" },
+          "w": { ".validate": "newData.isNumber()" },
+          "h": { ".validate": "newData.isNumber()" },
+          "t": { ".validate": "newData.isNumber()" },
+          "$other": { ".validate": false }
+        },
+        "cmd": {
+          ".validate": "newData.hasChildren(['id', 'type'])",
+          "id": { ".validate": "newData.isString() && newData.val().length <= 40" },
+          "type": { ".validate": "newData.isString() && newData.val().matches(/^(point|clear|home|whatsapp|mensajes|correo|app|stop)$/)" },
+          "x": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1" },
+          "y": { ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1" },
+          "t": { ".validate": "newData.isNumber()" },
+          "$other": { ".validate": false }
+        },
+        "client": {
+          "$field": { ".validate": "newData.isString() && newData.val().length <= 200 || newData.isNumber()" }
+        },
+        "$other": { ".validate": false }
+      }
+    }
+  }
+}

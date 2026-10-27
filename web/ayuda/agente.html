@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>Paso a Paso Ayuda · Agente</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffd23f'/%3E%3Cpath d='M18 33l9 9 19-20' fill='none' stroke='%230b6e75' stroke-width='7' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Lexend:wght@500;700&display=swap">
+<style>
+/* Layout: a la izquierda la pantalla de ella (clic = señalar) con los botones para llevarla; a la derecha estado, guion y enviar link. */
+:root{
+  --bg:#f3f7f8; --card:#ffffff; --ink:#10282f; --muted:#4b6168; --line:#d3e1e4; --soft:#e8f0f2;
+  --brand:#0b6e75; --brand-ink:#ffffff; --sun:#ffd23f; --sun-ink:#2b2200; --wa:#1a8f4c; --wa-ink:#fff;
+  --ok:#1f7a3a; --ok-bg:#e3f4e8; --warn:#8a5a00; --warn-bg:#fff4d1; --bad:#b3261e; --bad-bg:#fde7e5;
+  --display:"Lexend",system-ui,sans-serif; --body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0c1a1e; --card:#13262b; --ink:#e8f2f3; --muted:#a6bcc1; --line:#25424a; --soft:#1a3036;
+  --brand:#3fb7bf; --brand-ink:#05181b; --wa:#34c46f; --wa-ink:#04210f;
+  --ok:#6fd48d; --ok-bg:#163a24; --warn:#ffd27a; --warn-bg:#3a3215; --bad:#ff8a80; --bad-bg:#3d1c1a; color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.5 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.2;text-wrap:balance}
+p{margin:0}
+button,input{font:inherit;color:inherit}
+:focus-visible{outline:4px solid var(--sun);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px 20px;flex-wrap:wrap}
+.top h1{font-size:25px}
+.top p{color:var(--muted);font-size:15px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.box h2{font-size:19px}
+.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+label{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:700}
+input[type=text],input[type=tel]{font-size:17px;padding:11px 13px;border:2px solid var(--line);border-radius:12px;background:var(--bg);width:100%;min-width:0}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:560px){.two{grid-template-columns:1fr}}
+.btn{border:0;border-radius:13px;min-height:50px;padding:10px 16px;font:700 16px var(--display);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;background:var(--brand);color:var(--brand-ink)}
+.btn.sun{background:var(--sun);color:var(--sun-ink)}
+.btn.wa{background:var(--wa);color:var(--wa-ink)}
+.btn.ghost{background:transparent;border:2px solid var(--line);color:var(--ink)}
+.btn.bad{background:transparent;border:2px solid var(--bad);color:var(--bad)}
+.btn:disabled{opacity:.45;cursor:default}
+.hint{color:var(--muted);font-size:14px}
+.err{color:var(--bad);font-weight:700}
+
+.view{display:flex;flex-direction:column;gap:12px;align-items:center}
+.phone{width:100%;max-width:330px;border-radius:38px;background:#0b0f10;padding:10px;box-shadow:0 14px 34px rgba(5,25,30,.22)}
+.scr{position:relative;border-radius:29px;overflow:hidden;background:var(--soft);aspect-ratio:9/19.5;max-width:100%;display:grid;place-items:center;cursor:crosshair}
+.scr img{width:100%;height:100%;object-fit:contain;display:block;user-select:none;-webkit-user-drag:none}
+.scr .empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:16px;cursor:default}
+.mark{position:absolute;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:6px solid var(--sun);box-shadow:0 0 0 4px var(--brand);pointer-events:none;animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.25);opacity:.6}}
+@media (prefers-reduced-motion:reduce){.mark{animation:none}}
+.age{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;min-height:20px}
+.ctrls{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:330px}
+.ctrls .btn{min-height:46px;font-size:15px}
+
+.status{display:flex;gap:10px;align-items:center;font-weight:700;border-radius:12px;padding:10px 14px}
+.status i{width:12px;height:12px;border-radius:50%;background:currentColor;flex:none}
+.status.wait{background:var(--soft);color:var(--muted)}
+.status.ok{background:var(--ok-bg);color:var(--ok)}
+.status.warn{background:var(--warn-bg);color:var(--warn)}
+.status.bad{background:var(--bad-bg);color:var(--bad)}
+.say{background:var(--soft);border-radius:14px;padding:14px 16px;font-size:20px;line-height:1.45}
+.say small{display:block;font:500 12px var(--display);letter-spacing:.08em;text-transform:uppercase;color:var(--brand);margin-bottom:4px}
+.meta{font-size:14px;color:var(--muted)}
+.aviso{background:var(--warn-bg);border-radius:12px;padding:10px 14px;font-weight:700}
+.linkbox{font-family:ui-monospace,Menlo,monospace;font-size:13px;background:var(--bg);border:2px dashed var(--line);border-radius:12px;padding:10px;word-break:break-all;user-select:all}
+.rule{background:var(--ok-bg);border-radius:14px;padding:12px 14px;font-size:15px}
+</style>
+<script src="config.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div><h1>Paso a Paso Ayuda</h1><p>Ve la pantalla de tu cliente y señálale dónde tocar.</p></div>
+    <span class="hint" id="sidLabel"></span>
+  </header>
+
+  <section class="box" id="noConfig" hidden>
+    <h2>Falta configurar</h2>
+    <p>Escribe la dirección de tu base de datos de Firebase en el archivo <b>ayuda/config.js</b> y vuelve a publicar en Netlify.</p>
+  </section>
+
+  <section class="box" id="setup" hidden>
+    <h2>Nueva sesión de ayuda</h2>
+    <div class="two">
+      <label for="agentName">Tu nombre<input id="agentName" type="text" autocomplete="name" placeholder="Ej. Ana Rodríguez"></label>
+      <label for="clientName">Nombre del cliente<input id="clientName" type="text" placeholder="Ej. María López"></label>
+    </div>
+    <label for="clientPhone">WhatsApp del cliente (opcional)<input id="clientPhone" type="tel" inputmode="tel" placeholder="Ej. (305) 555-0101"></label>
+    <div class="row"><button class="btn sun" id="create">Crear sesión</button><span class="err" id="setupErr" hidden></span></div>
+    <p class="hint">Cada sesión tiene un link único que solo sirve para esa ayuda. Al terminar, se borra todo.</p>
+  </section>
+
+  <div class="grid" id="live" hidden>
+    <section class="view" aria-label="Pantalla del cliente">
+      <div class="phone"><div class="scr" id="scr" title="Haz clic donde debe tocar">
+        <img id="frame" alt="Pantalla del teléfono del cliente" hidden>
+        <div class="empty" id="empty">Aquí verás su pantalla cuando la comparta.</div>
+      </div></div>
+      <p class="age" id="age" aria-live="polite"></p>
+      <div class="ctrls">
+        <button class="btn ghost" data-cmd="home">Ir al inicio</button>
+        <button class="btn ghost" data-cmd="app">Volver a Paso a Paso</button>
+        <button class="btn ghost" data-cmd="whatsapp">Abrir WhatsApp</button>
+        <button class="btn ghost" data-cmd="mensajes">Abrir Mensajes</button>
+        <button class="btn ghost" data-cmd="correo">Abrir correo</button>
+        <button class="btn ghost" data-cmd="clear">Quitar círculo</button>
+      </div>
+    </section>
+
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:0">
+      <section class="box" aria-live="polite">
+        <div class="status wait" id="status"><i></i><span id="statusText">Esperando</span></div>
+        <div class="say"><small>Dile</small><span id="say"></span></div>
+        <p class="hint" id="tip"></p>
+        <p class="aviso" id="aviso" hidden></p>
+        <p class="meta" id="device"></p>
+      </section>
+
+      <section class="box">
+        <h2>Mándale el link</h2>
+        <div class="linkbox" id="link"></div>
+        <div class="row">
+          <a class="btn wa" id="sendWa" target="_blank" rel="noopener">Enviar por WhatsApp</a>
+          <button class="btn ghost" id="copy">Copiar link</button>
+        </div>
+      </section>
+
+      <p class="rule"><b>Tú señalas, ella toca.</b> No le pidas contraseñas, códigos ni su número de Seguro Social: los escribe ella. La autorización la tiene que tocar ella.</p>
+
+      <div class="row"><button class="btn bad" id="end">Terminar sesión y borrar</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const DB = (window.PAP_DB || '').replace(/\/+$/, '');
+const $ = id => document.getElementById(id);
+const ls = { get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } },
+             set(k,v){ try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch(e){} } };
+const digits = s => String(s || '').replace(/\D/g, '');
+const first = s => String(s || '').trim().split(/\s+/)[0] || '';
+const rid = (n=16) => { const b = new Uint8Array(n); crypto.getRandomValues(b); return btoa(String.fromCharCode(...b)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); };
+const api = (path, method='GET', body) => fetch(`${DB}/${path}.json`, { method, headers: body ? {'Content-Type':'application/json'} : undefined, body: body ? JSON.stringify(body) : undefined });
+
+/* Guion para cada momento, según lo que reporta su teléfono. */
+const SCRIPT = {
+  none: { cls:'wait', label:'Esperando a que toque el link',
+    say:'Abra WhatsApp y toque las letras azules de mi mensaje. Después toque el botón amarillo que dice "Conectar con mi agente".',
+    tip:'Si es la primera vez, primero tiene que instalar la app: que toque "Instalar la app" en esa misma página.' },
+  permiso_superposicion: { cls:'warn', label:'Paso 1 de 2: permiso para el círculo',
+    say:'Toque el botón amarillo que dice "Dar permiso". Se abre una lista: busque "Paso a Paso Ayuda" y toque el interruptor para prenderlo. Después toque la flechita de atrás.',
+    tip:'En algunos Samsung hay que tocar primero "Paso a Paso Ayuda" y después el interruptor.' },
+  permiso_pantalla: { cls:'warn', label:'Paso 2 de 2: compartir pantalla',
+    say:'Toque el botón amarillo grande que dice "Compartir mi pantalla". Después toque "Empezar" o "Iniciar ahora".',
+    tip:'Si le sale una lista para elegir, que toque "Toda la pantalla" o "Pantalla completa".' },
+  rechazo_pantalla: { cls:'bad', label:'Tocó "Cancelar"',
+    say:'No pasa nada. Toque otra vez el botón amarillo y después "Empezar".', tip:'' },
+  error_captura: { cls:'bad', label:'Su teléfono no dejó compartir',
+    say:'Cierre la app y vuelva a tocar mi link de WhatsApp.', tip:'' },
+  compartiendo: { cls:'ok', label:'Ves su pantalla',
+    say:'Toque donde está el círculo amarillo.',
+    tip:'Haz clic en la imagen donde debe tocar: a ella le aparece un círculo amarillo en ese lugar. Si se pierde entre apps, usa los botones de abajo de la imagen.' },
+  terminado: { cls:'wait', label:'Dejó de compartir',
+    say:'Si fue sin querer, toque otra vez mi link de WhatsApp.', tip:'' },
+  sin_senal: { cls:'bad', label:'Sin señal de su teléfono',
+    say:'¿Me sigue escuchando? Si se cerró la app, toque otra vez mi link de WhatsApp.', tip:'Puede que se le haya ido el internet o que el teléfono haya cerrado la app.' }
+};
+
+let sid = null, es = null, data = {}, lastMark = null;
+
+function start(){
+  if (!/^(https:\/\/|http:\/\/(localhost|127\.0\.0\.1)[:/])/.test(DB)) { $('noConfig').hidden = false; return; }
+  const saved = ls.get('pap-ayuda-sid');
+  $('agentName').value = ls.get('pap-ayuda-agent') || '';
+  if (saved && /^[A-Za-z0-9_-]{20,64}$/.test(saved)) openSession(saved);
+  else $('setup').hidden = false;
+}
+
+$('create').onclick = async () => {
+  const agent = $('agentName').value.trim(), client = $('clientName').value.trim();
+  if (!agent){ $('setupErr').textContent = 'Escribe tu nombre.'; $('setupErr').hidden = false; return; }
+  $('create').disabled = true;
+  const id = rid();
+  try {
+    const r = await api(`sessions/${id}/agent`, 'PUT', { name: agent, client, t: {'.sv':'timestamp'} });
+    if (!r.ok) throw new Error(r.status);
+  } catch(e){
+    $('setupErr').textContent = 'No pude crear la sesión. Revisa la dirección de Firebase y las reglas.'; $('setupErr').hidden = false;
+    $('create').disabled = false; return;
+  }
+  ls.set('pap-ayuda-agent', agent);
+  ls.set('pap-ayuda-client', client);
+  ls.set('pap-ayuda-phone', digits($('clientPhone').value));
+  ls.set('pap-ayuda-sid', id);
+  $('create').disabled = false;
+  openSession(id);
+};
+
+function openSession(id){
+  sid = id; data = {};
+  $('setup').hidden = true; $('live').hidden = false;
+  $('sidLabel').textContent = 'Sesión ' + id.slice(0, 6);
+  const link = `${location.origin}${location.pathname.replace(/agente\.html$/, '')}#${id}`;
+  const agent = ls.get('pap-ayuda-agent') || '', client = ls.get('pap-ayuda-client') || '';
+  let phone = ls.get('pap-ayuda-phone') || ''; if (phone.length === 10) phone = '1' + phone;
+  const msg = `${client ? `Hola ${first(client)}` : 'Hola'}, soy ${agent}. Para ayudarte con tu teléfono, toca aquí:\n${link}`;
+  $('link').textContent = link;
+  $('sendWa').href = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  $('copy').onclick = async e => { try { await navigator.clipboard.writeText(link); e.target.textContent = 'Copiado'; } catch(_){ e.target.textContent = 'Selecciona y copia'; } setTimeout(()=>e.target.textContent='Copiar link', 1600); };
+  listen();
+  render();
+}
+
+/* Escucha en vivo todo lo de la sesión (imagen, estado) con la conexión de Firebase. */
+function listen(){
+  if (es) es.close();
+  es = new EventSource(`${DB}/sessions/${sid}.json`);
+  const apply = (ev, merge) => {
+    let m; try { m = JSON.parse(ev.data); } catch(e){ return; }
+    if (!m || typeof m.path !== 'string') return;
+    const keys = m.path.split('/').filter(Boolean);
+    if (!keys.length){ data = merge ? Object.assign({}, data, m.data || {}) : (m.data || {}); render(); return; }
+    let o = data;
+    for (let k = 0; k < keys.length - 1; k++){ if (typeof o[keys[k]] !== 'object' || !o[keys[k]]) o[keys[k]] = {}; o = o[keys[k]]; }
+    const last = keys[keys.length - 1];
+    if (merge && m.data && typeof m.data === 'object') o[last] = Object.assign({}, o[last] || {}, m.data);
+    else if (m.data === null) delete o[last];
+    else o[last] = m.data;
+    render();
+  };
+  es.addEventListener('put', e => apply(e, false));
+  es.addEventListener('patch', e => apply(e, true));
+  es.onerror = () => { /* el navegador reconecta solo */ };
+}
+
+function render(){
+  const c = data.client || {};
+  let key = c.state && SCRIPT[c.state] ? c.state : 'none';
+  if (key === 'compartiendo' && c.t && Date.now() - c.t > 20000) key = 'sin_senal';
+  const s = SCRIPT[key];
+  $('status').className = 'status ' + s.cls;
+  $('statusText').textContent = s.label;
+  $('say').textContent = s.say;
+  $('tip').textContent = s.tip;
+  const showAviso = !!(c.aviso && c.avisoT && Date.now() - c.avisoT < 20000);
+  $('aviso').hidden = !showAviso; $('aviso').textContent = showAviso ? c.aviso : '';
+  $('device').textContent = c.model ? `Su teléfono: ${c.model}${c.android ? ' · Android ' + c.android : ''}` : '';
+  const sharing = key === 'compartiendo';
+  document.querySelectorAll('[data-cmd]').forEach(b => b.disabled = !sharing);
+  const f = data.frame;
+  if (f && f.d){
+    const img = $('frame');
+    const src = 'data:image/jpeg;base64,' + f.d;
+    if (img.src !== src) img.src = src;
+    if (f.w && f.h) $('scr').style.aspectRatio = `${f.w} / ${f.h}`;
+    img.hidden = false; $('empty').hidden = true;
+  } else {
+    $('frame').hidden = true; $('empty').hidden = false;
+  }
+  tick();
+}
+
+function tick(){
+  const f = data.frame;
+  if (!f || !f.t){ $('age').textContent = ''; return; }
+  const s = Math.max(0, Math.round((Date.now() - f.t) / 1000));
+  $('age').textContent = s <= 2 ? 'En vivo' : `Última imagen: hace ${s} s (cambia cuando su pantalla cambia)`;
+}
+setInterval(() => { if (sid) { tick(); render(); } }, 3000);
+
+/* Señalar: clic en la imagen = círculo en su teléfono. */
+$('scr').addEventListener('click', e => {
+  const img = $('frame'); if (img.hidden) return;
+  const r = img.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+  if (!r.width || !r.height || !isFinite(x) || !isFinite(y) || x < 0 || x > 1 || y < 0 || y > 1) return;
+  send({ type:'point', x: +x.toFixed(4), y: +y.toFixed(4) });
+  showMark(x, y);
+});
+function showMark(x, y){
+  if (lastMark) lastMark.remove();
+  const m = document.createElement('span'); m.className = 'mark';
+  m.style.left = (x * 100) + '%'; m.style.top = (y * 100) + '%';
+  $('scr').appendChild(m); lastMark = m;
+  setTimeout(() => { if (lastMark === m){ m.remove(); lastMark = null; } }, 15000);
+}
+function send(cmd){
+  if (!sid) return;
+  return api(`sessions/${sid}/cmd`, 'PUT', Object.assign({ id: rid(8), t: {'.sv':'timestamp'} }, cmd)).catch(()=>{});
+}
+document.querySelectorAll('[data-cmd]').forEach(b => b.onclick = () => {
+  send({ type: b.dataset.cmd });
+  if (b.dataset.cmd === 'clear' && lastMark){ lastMark.remove(); lastMark = null; }
+});
+
+$('end').onclick = async () => {
+  $('end').disabled = true;
+  await send({ type:'stop' });
+  setTimeout(async () => {
+    try { await api(`sessions/${sid}`, 'DELETE'); } catch(e){}
+    if (es) es.close();
+    ls.set('pap-ayuda-sid', null);
+    sid = null; data = {};
+    $('live').hidden = true; $('setup').hidden = false; $('end').disabled = false;
+    $('frame').removeAttribute('src'); $('sidLabel').textContent = '';
+  }, 1500);
+};
+
+start();
+</script>
+</body>
+</html>
